@@ -1,65 +1,49 @@
-
 name: Build and deploy Python app to Azure Web App - databurn
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-
 permissions:
   id-token: write
   contents: read
-
-# ... (início do arquivo igual)
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      # Removemos a criação do antenv e o pip install daqui para economizar tempo de build
-                
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: . # Envia todo o diretório (incluindo o seu requirements.txt)
-
+          path: .
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
       id-token: write
       contents: read
-
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: python-app
-      
       - name: Login to Azure via OIDC
         uses: azure/login@v2
         with:
-          client-id: "183499d5-cb81-4c2a-8abf-cedf77d8ea70"
-          tenant-id: "11dbbfe2-89b8-4549-be10-cec364e59551"
-          subscription-id: "0a6337c5-7ac8-46e7-9b15-00b8fb6c51da"
-
-      - name: 'Deploy to Azure Web App'
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'databurn'
           slot-name: 'Production'
-          # O comando chama diretamente o streamlit instalado globalmente/no escopo do container do Azure
           startup-command: 'streamlit run app.py --server.port 8000 --server.address 0.0.0.0'
