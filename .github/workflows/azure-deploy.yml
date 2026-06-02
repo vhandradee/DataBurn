@@ -20,7 +20,7 @@ jobs:
       uses: azure/login@v2
       with:
         client-id: "a48945a2-15c5-49ca-a9fd-e556c0aab84b"
-        tenant-id: "0a6337c5-7ac8-46e7-9b15-00b8fb6c51da"
+        tenant-id: "11dbbfe2-89b8-4549-be10-cec364e59551"
         subscription-id: "0a6337c5-7ac8-46e7-9b15-00b8fb6c51da"
 
     - name: Deploy para o Web App
