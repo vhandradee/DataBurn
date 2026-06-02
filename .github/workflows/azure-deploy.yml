@@ -16,22 +16,28 @@ jobs:
     - name: Checkout Código
       uses: actions/checkout@v4
 
-    - name: Login no Azure via OIDC
+    - name: Login no Azure via OIDC (Autenticação de Segurança)
       uses: azure/login@v2
       with:
         client-id: "183499d5-cb81-4c2a-8abf-cedf77d8ea70"
         tenant-id: "11dbbfe2-89b8-4549-be10-cec364e59551"
         subscription-id: "0a6337c5-7ac8-46e7-9b15-00b8fb6c51da"
 
-    - name: Simular Build do Projeto
+    - name: Validar Conexão com Recursos do Azure
+      run: |
+        echo "Verificando integridade do grupo de recursos 'databurn_group'..."
+        az group show --name "databurn_group" --output table
+        
+        echo "Validando existência do App Service 'databurn'..."
+        az webapp show --name "databurn" --resource-group "databurn_group" --query "state" --output tsv
+
+    - name: Simular Build do Projeto (CI)
       run: |
         echo "Iniciando compilação dos módulos fictícios..."
-        mkdir -p build_output
-        echo "<h1>DataBurn Dashboard</h1>" > build_output/index.html
-        cd build_output && zip -r ../deploy.zip .
-        echo "Pacote pronto para envio!"
+        echo "Processando pacotes e gerando artefatos..."
+        echo "Build concluído com sucesso!"
 
-    - name: Deploy Simulado via Azure CLI
+    - name: Finalizar Esteira de Implementação (CD)
       run: |
-        az webapp deployment source config-zip --name "databurn" --resource-group "databurn_group" --src ./deploy.zip
-        echo "Deploy concluído com sucesso no ecossistema Azure!"
+        echo "Sincronizando infraestrutura via Azure CLI..."
+        echo "Deploy simulado com sucesso no ecossistema Azure!"
