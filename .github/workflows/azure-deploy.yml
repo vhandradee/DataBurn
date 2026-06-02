@@ -23,7 +23,15 @@ jobs:
         tenant-id: "11dbbfe2-89b8-4549-be10-cec364e59551"
         subscription-id: "0a6337c5-7ac8-46e7-9b15-00b8fb6c51da"
 
-    - name: Deploy para o Web App
+    - name: Simular Build do Projeto
+      run: |
+        echo "Iniciando compilação dos módulos fictícios..."
+        mkdir -p build_output
+        echo "<h1>DataBurn Dashboard</h1>" > build_output/index.html
+        echo "Build concluído com sucesso!"
+
+    - name: Deploy para o Web App (Modo Estático)
       uses: azure/webapps-deploy@v3
       with:
         app-name: "databurn"
+        package: './build_output'
