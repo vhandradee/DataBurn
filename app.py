@@ -11,13 +11,14 @@ st.set_page_config(
 )
 
 # Estilização customizada via Markdown para dar cara de sistema robusto
+# Estilização customizada via Markdown para dar cara de sistema robusto
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
     h1 { color: #ff4b4b !important; font-family: 'Helvetica Neue', sans-serif; }
     .metric-box { background-color: #1e222b; padding: 15px; border-radius: 10px; border-left: 5px solid #ff4b4b; }
     </style>
-""", unsafe_index=True)
+""", unsafe_allow_html=True)
 
 # Cabeçalho Principal institucional exigido pelo roteiro
 st.title("🛰️ DataBurn — Monitoramento Espacial Activo")
