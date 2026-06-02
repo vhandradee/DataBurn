@@ -1,5 +1,4 @@
-import streamlit as str
-
+import streamlit as st
 st.title("DataBurn - Monitoramento Espacial")
 st.subheader("Equipe: Engenharia de Software - FIAP")
 st.markdown("---")
